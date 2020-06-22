@@ -1,2 +1,3 @@
-export const Tablet = "48rem";
-export const Desktop = "75rem";
+export const Tablet = "52rem";
+export const Desktop = "80rem";
+export const MaxWidth = "80rem";

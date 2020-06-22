@@ -7,3 +7,4 @@ export default {
 };
 
 export const Default = () => <AddForm />;
+export const Error = () => <AddForm hasError={true} />;

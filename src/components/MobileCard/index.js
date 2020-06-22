@@ -13,6 +13,10 @@ const InternalUseMobileCard = styled.div`
     display: flex;
     justify-content: space-between;
     .mobile-card__company-name {
+      white-space: nowrap;
+      max-width: 8rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
       font-size: 0.875rem;
       font-weight: 800;
       text-transform: uppercase;
@@ -41,42 +45,46 @@ const InternalUseMobileCard = styled.div`
   }
 `;
 
-const MobileCard = () => {
-  const name = "Alphabet In. Cl...";
-  const symbol = "GOOG";
-  const current = 706.32;
-  const open = 691;
-
+const MobileCard = ({ StockData }) => {
   // CREATE A ROUND FUNCTION THAT GENERAGES THE DESIRED DECIMAL POINTS
   const round = (value, decimals) =>
     Number(Math.round(value + "e" + decimals) + "e-" + decimals);
 
-  // CALCULATE STOCK DATA BASED ON PROPS
-  const status = current > open ? "posative" : "negative";
-  const points = round(current - open, 2);
-  const percentage = round(((current - open) / open) * 100, 2);
-
   return (
-    <InternalUseMobileCard>
-      <div className="mobile-card__section top">
-        <div className="mobile-card__company-name">{name}</div>
-        <div className="mobile-card__price">706.32</div>
-      </div>
-      <div className="mobile-card__section bottom">
-        <div className="mobile-card__company-symbol">{symbol}</div>
-        <div className={`mobile-card__stats ${status}`}>
-          <div className="mobile-card__arrow">
-            {status === "posative" ? (
-              <ArrowUp fill={Green} width={8} />
-            ) : (
-              <ArrowDown fill={Red} width={8} />
-            )}
-          </div>
-          <div className="mobile-card__points">{points}</div>
-          <div className="mobile-card__percentage">({percentage}%)</div>
-        </div>
-      </div>
-    </InternalUseMobileCard>
+    <>
+      {StockData.map(stock => {
+        // CALCULATE STOCK DATA BASED ON PROPS
+        const status =
+          stock.priceCurrent > stock.priceOpen ? "posative" : "negative";
+        const points = round(stock.priceCurrent - stock.priceOpen, 2);
+        const percentage = round(
+          ((stock.priceCurrent - stock.priceOpen) / stock.priceOpen) * 100,
+          2
+        );
+        return (
+          <InternalUseMobileCard key={stock.id}>
+            <div className="mobile-card__section top">
+              <div className="mobile-card__company-name">{stock.name}</div>
+              <div className="mobile-card__price">{stock.priceCurrent}</div>
+            </div>
+            <div className="mobile-card__section bottom">
+              <div className="mobile-card__company-symbol">{stock.symbol}</div>
+              <div className={`mobile-card__stats ${status}`}>
+                <div className="mobile-card__arrow">
+                  {status === "posative" ? (
+                    <ArrowUp fill={Green} width={8} />
+                  ) : (
+                    <ArrowDown fill={Red} width={8} />
+                  )}
+                </div>
+                <div className="mobile-card__points">{points}</div>
+                <div className="mobile-card__percentage">({percentage}%)</div>
+              </div>
+            </div>
+          </InternalUseMobileCard>
+        );
+      })}
+    </>
   );
 };
 
