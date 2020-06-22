@@ -8,6 +8,7 @@ const InternalUseHeader = styled.header`
     font-size: 2rem;
   }
   @media (min-width: ${Tablet}) {
+    margin-left: 0.3125rem;
     .main-title {
       margin-bottom: 2.875rem;
       font-size: 3.5rem;

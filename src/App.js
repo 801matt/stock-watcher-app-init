@@ -11,37 +11,36 @@ const InternalUseApp = styled.div`
   max-width: ${MaxWidth};
   margin: 0 auto;
   @media (min-width: ${Tablet}) {
-    padding: 2rem;
+    /* CREATE UNIFORM PADDING WRAPPER TO ACCOUNT FOR CARDS MARGIN >= TABLET */
+    padding: calc(2rem - 0.3125rem);
   }
 `;
 
 const App = () => {
   const [stocks, setStocks] = useState([]);
-  const [errorState, setErrorState] = useState(false);
+  const [errorState, setErrorState] = useState("");
 
   const handleAddStockClicked = val => {
-    const handleValidInput = stockID => {
-      console.log(stockID.id);
-      setErrorState(false);
-    };
-    const handleInvalidInput = () => {
-      setErrorState(true);
-    };
-    // SET ERROR TO TRUE IF INPUT IS EMPTY
+    // CREATE A TRIMMED VERSION OF THE USER INPUT
+    const userInput = val.trim().toUpperCase();
     // CHECK IF THE USER INPUT === A STOCK SYMBOL
-    const symboleExists = () => {
-      return StockData.some(el => {
-        return el.symbol === val;
-      });
-    };
-    if (symboleExists()) {
-      const newStocks = [...stocks];
-      const newStock = StockData.filter(x => x.symbol === val);
-      newStocks.push(newStock[0]);
-      setStocks(newStocks);
-      // console.log(newStock);
+    const symbolExists = StockData.some(el => el.symbol === userInput);
+    if (symbolExists) {
+      // CHECK TO SEE IF STOCK ALREADY EXISTS IN STOCKDATA OBJECT
+      const alreadyExistsInStockDataObject = stocks.some(
+        el => el.symbol === userInput
+      );
+      if (!alreadyExistsInStockDataObject) {
+        const newStocks = [...stocks];
+        const newStock = StockData.filter(x => x.symbol === userInput);
+        newStocks.push(newStock[0]);
+        setStocks(newStocks);
+        setErrorState("");
+      } else {
+        setErrorState("Stock already added.");
+      }
     } else {
-      setErrorState(true);
+      setErrorState("Please enter a valid stock symbol.");
     }
   };
   console.log(stocks);
@@ -50,10 +49,10 @@ const App = () => {
     <InternalUseApp>
       <Header />
       <AddForm
-        hasError={errorState}
+        errorState={errorState}
         addStockClicked={stockSymbol => handleAddStockClicked(stockSymbol)}
       />
-      <Dashboard StockData={StockData} />
+      <Dashboard StockData={stocks} />
     </InternalUseApp>
   );
 };

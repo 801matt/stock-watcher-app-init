@@ -7,4 +7,4 @@ export default {
 };
 
 export const Default = () => <AddForm />;
-export const Error = () => <AddForm hasError={true} />;
+export const Error = () => <AddForm errorState={"Stock already added."} />;

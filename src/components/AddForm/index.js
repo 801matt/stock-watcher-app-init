@@ -65,7 +65,7 @@ const InternalUseAddForm = styled.section`
     }
   }
   @media (min-width: ${Tablet}) {
-    margin: 2.5rem 0;
+    margin: 1.5rem 0 2.5rem 0.3125rem;
     .add-stock__form .small {
       display: none;
     }
@@ -76,9 +76,9 @@ const InternalUseAddForm = styled.section`
   }
 `;
 
-const AddForm = ({ hasError, addStockClicked }) => {
+const AddForm = ({ errorState, addStockClicked }) => {
   const [inputValue, setInputValue] = useState("");
-  const getErrorState = hasError ? "error" : "no-error";
+  const getErrorState = errorState ? "error" : "no-error";
 
   const handleOnChange = e => {
     setInputValue(e.target.value);
@@ -87,6 +87,7 @@ const AddForm = ({ hasError, addStockClicked }) => {
   const handleFormSubmit = e => {
     e.preventDefault();
     addStockClicked(inputValue);
+    setInputValue("");
   };
 
   return (
@@ -96,9 +97,7 @@ const AddForm = ({ hasError, addStockClicked }) => {
         className={`add-stock__form ${getErrorState}`}
       >
         <div className="add-stock__input-and-hint">
-          <div className="add-stock__hint">
-            Please enter a valid stock symbol
-          </div>
+          <div className="add-stock__hint">{errorState}</div>
           <input
             value={inputValue}
             onChange={handleOnChange}
